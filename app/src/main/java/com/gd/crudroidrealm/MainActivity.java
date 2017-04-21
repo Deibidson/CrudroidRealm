@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(listagemTitulos.get(position).toString());
 
                 Intent intent = new Intent(MainActivity.this, ReceiverBookDetail.class);
                 intent.putExtra("livro_titulo", listagemTitulos.get(position).toString());
@@ -132,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
                 listagemTitulos.add(l.getTitulo().toString());
             }
         }
+
+        adapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -160,6 +162,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         realm.close();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        System.out.println("------------------------------------------------------------onrest");
+
     }
 
     public void prepareUI(){

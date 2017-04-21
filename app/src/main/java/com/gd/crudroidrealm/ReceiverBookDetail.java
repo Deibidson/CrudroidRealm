@@ -3,6 +3,9 @@ package com.gd.crudroidrealm;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ButtonBarLayout;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.gd.crudroidrealm.Modelo.Livro;
@@ -19,7 +22,7 @@ public class ReceiverBookDetail extends AppCompatActivity {
 
         realm = Realm.getDefaultInstance();
 
-        Livro livroRealm = realm.where(Livro.class)
+        final Livro livroRealm = realm.where(Livro.class)
                 .equalTo("titulo",getIntent().getStringExtra("livro_titulo")).findFirst();
 
         EditText titulo = (EditText) findViewById(R.id.titulo);
@@ -29,5 +32,21 @@ public class ReceiverBookDetail extends AppCompatActivity {
         titulo.setText(livroRealm.getTitulo());
         autor.setText(livroRealm.getAutor());
         isbn.setText(livroRealm.getIsbn());
+
+        Button btndel = (Button) findViewById(R.id.btndel);
+        btndel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        final Livro l =  livroRealm;
+                        l.deleteFromRealm();
+
+                        finish();
+                    }
+                });
+            }
+        });
     }
 }
