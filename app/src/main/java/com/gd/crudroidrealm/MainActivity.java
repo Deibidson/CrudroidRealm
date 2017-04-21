@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -45,6 +46,17 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,listagemTitulos);
         listView.setAdapter(adapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println(listagemTitulos.get(position).toString());
+
+                Intent intent = new Intent(MainActivity.this, ReceiverBookDetail.class);
+                intent.putExtra("livro_titulo", listagemTitulos.get(position).toString());
+                startActivity(intent);
+            }
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -72,11 +84,15 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        EditText txt = (EditText) v.findViewById(R.id.titulo);
+                        EditText txttitulo = (EditText) v.findViewById(R.id.titulo);
+                        EditText txtautor = (EditText) v.findViewById(R.id.autor);
+                        EditText txtisbn= (EditText) v.findViewById(R.id.isbn);
 
 
                         final Livro book = new Livro();
-                        book.setTitulo(txt.getText().toString());
+                        book.setTitulo(txttitulo.getText().toString());
+                        book.setAutor(txtautor.getText().toString());
+                        book.setIsbn(txtisbn.getText().toString());
 
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override

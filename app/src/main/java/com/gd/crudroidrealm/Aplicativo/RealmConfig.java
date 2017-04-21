@@ -18,7 +18,8 @@ public class RealmConfig extends Application {
 
         RealmConfiguration config = new RealmConfiguration.Builder()
                 .name("myrealm.realm")
-                .schemaVersion(0)
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
                 .build();
 
         Realm realm = Realm.getInstance(config);
